@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+    frontend:
+        image: node:15.3.0-alpine3.12
+        ports:
+            - "8080:8080"
+        working_dir: /application
+        volumes:
+            - .:/application
+        command: /bin/sh -c "yarn install && yarn serve"
+        restart: unless-stopped
