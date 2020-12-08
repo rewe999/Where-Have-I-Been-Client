@@ -1,13 +1,170 @@
 <template>
-  <h1>Authorisation</h1>
+  <div class="container">
+    <div class="d-flex justify-content-center h-100">
+      <div class="card">
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="#"
+                @click="choice = true"
+                :class="{ active: choice }"
+                >Login</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="#"
+                @click="choice = false"
+                :class="{ active: !choice }"
+                >Sign up</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="card-body" v-if="choice">
+          <div class="animate__animated animate__pulse">
+            <Login />
+          </div>
+        </div>
+        <div class="card-body" v-else>
+          <div class="animate__animated animate__pulse">
+            <Register />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import Login from "../components/Authorisation/Login.vue";
+import Register from "../components/Authorisation/Register.vue";
+
 export default {
-    name: 'Authorisation'
-}
+  name: "Auth",
+  data() {
+    return {
+      choice: true,
+    };
+  },
+  components: {
+    Login,
+    Register,
+  },
+};
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css?family=Numans");
 
+html,
+body {
+  background-image: url("http://getwallpapers.com/wallpaper/full/a/5/d/544750.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%;
+  font-family: "Numans", sans-serif;
+}
+
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.card {
+  min-height: 350px;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 400px;
+  background-color: white !important;
+  opacity: 0.8;
+}
+
+.card-header h3 {
+  color: white;
+}
+
+.input-group-prepend span {
+  width: 50px;
+  background-color: #ffc312;
+  color: black;
+  border: 0 !important;
+}
+
+input:focus {
+  outline: 1 1 1 1 !important;
+  box-shadow: 1 1 1 1 !important;
+}
+
+.remember {
+  color: black;
+}
+
+.remember input {
+  width: 20px;
+  height: 20px;
+  margin-left: 15px;
+  margin-right: 5px;
+}
+
+.login_btn {
+  color: black;
+  background-color: #69b9ff;
+  width: 100px;
+  transition: 0.3s linear;
+}
+
+.login_btn:hover {
+  color: white;
+  background-color: #4a95ff;
+  transition: 0.3s linear;
+}
+
+.input-login,
+.input-pass {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #000000;
+  transition: 0.3s linear;
+}
+
+.input-pass {
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+.links {
+  color: white;
+}
+
+.links a {
+  margin-left: 4px;
+}
+
+.form-control {
+  border-bottom: 1px solid #ddd;
+}
+
+.hrdivider {
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+.hrdivider span {
+  position: absolute;
+  top: -11px;
+  background: #fff;
+  padding-left: 20;
+  padding-top: 0;
+  font-weight: bold;
+  font-size: 16px;
+}
 </style>
+
