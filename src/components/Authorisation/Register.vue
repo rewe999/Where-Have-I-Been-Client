@@ -33,7 +33,11 @@
         />
       </div>
       <div class="form-group">
-        <input type="submit" value="Create account" class="btn float-right login_btn w-100 mb-4" />
+        <input
+          type="submit"
+          value="Create account"
+          class="btn float-right login_btn w-100 mb-4"
+        />
       </div>
     </form>
   </div>
@@ -56,13 +60,11 @@
 
 <script>
 export default {
-  name: "Login",
+  name: "Register",
 };
 </script>
 
 <style>
-
-
 h2 {
   width: 100%;
   text-align: center;
@@ -73,7 +75,7 @@ h2 {
 
 h2 span {
   background: #fff;
-  color: #69B9FF;
+  color: #69b9ff;
   font-size: 1rem;
   padding: 0 10px;
 }

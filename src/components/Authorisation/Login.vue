@@ -20,12 +20,16 @@
         <input type="checkbox" />Remember Me
       </div>
       <div class="form-group">
-        <input type="submit" value="Sign In" class="btn float-right login_btn w-100 mb-4" />
+        <input
+          type="submit"
+          value="Sign In"
+          class="btn float-right login_btn w-100 mb-4"
+        />
       </div>
     </form>
   </div>
   <div class="card-footer">
-    <h2><span>or connect with</span></h2>
+    <h2 class="connectWith"><span>or connect with</span></h2>
     <div class="d-flex justify-content-around mt-4">
       <img
         src="../../assets/facebook-f-brands.svg"
@@ -48,9 +52,7 @@ export default {
 </script>
 
 <style>
-
-
-h2 {
+.connectWith {
   width: 100%;
   text-align: center;
   border-bottom: 1px solid #000;
@@ -58,9 +60,9 @@ h2 {
   margin: 10px 0 20px;
 }
 
-h2 span {
+.connectWith span {
   background: #fff;
-  color: #69B9FF;
+  color: #69b9ff;
   font-size: 1rem;
   padding: 0 10px;
 }
