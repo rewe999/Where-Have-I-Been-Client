@@ -16,9 +16,6 @@
           placeholder="Password"
         />
       </div>
-      <div class="row align-items-center remember mt-2 mb-4">
-        <input type="checkbox" />Remember Me
-      </div>
       <div class="form-group">
         <input
           type="submit"
