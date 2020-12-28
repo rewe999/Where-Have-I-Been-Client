@@ -6,6 +6,11 @@ const routes = [
     name: "Home",
     component: () => import( "../views/Home.vue")
   },
+  {
+    path: '/tripcreate',
+    name: 'tripcreate',
+    component: () => import('../views/Map/CreateTrip.vue')
+  },  
 ];
 
 const router = createRouter({
