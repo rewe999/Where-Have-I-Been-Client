@@ -9,14 +9,27 @@ const routes = [
   {
     path: "/login",
     name: "Login",
-    // component: () => import( "../views/Authorisation.vue")
     component: () => import( "../views/Login.vue")
   },
   {
     path: "/register",
     name: "Register",
-    // component: () => import( "../views/Authorisation.vue")
     component: () => import( "../views/Register.vue")
+  },
+  {
+    path: "/feed",
+    name: "Feed",
+    component: () => import( "../views/Feed.vue")
+  },
+  {
+    path: "/community",
+    name: "Community",
+    component: () => import( "../views/Community.vue")
+  },
+  {
+    path: "/community/users",
+    name: "CommunityUsers",
+    component: () => import( "../views/CommunityuUser.vue")
   },
 ];
 
