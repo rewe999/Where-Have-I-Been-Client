@@ -7,6 +7,11 @@ const routes = [
     component: () => import( "../views/Home.vue")
   },
   {
+    path: "/feed",
+    name: "Feed",
+    component: () => import( "../views/Feed.vue")
+  },
+  {
     path: "/community",
     name: "Community",
     meta: {title: 'Community'},
