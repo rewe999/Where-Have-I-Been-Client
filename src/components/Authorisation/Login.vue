@@ -35,7 +35,7 @@
       />
       <img
         src="../../assets/google-brands.svg"
-        alt="facebook"
+        alt="google"
         class="image-auth"
       />
     </div>
@@ -54,8 +54,8 @@ export default {
   text-align: center;
   border-bottom: 1px solid #000;
   line-height: 0.1em;
-  margin: 10px 0 20px;
-}
+  margin: 5% 0 10%;
+  }
 
 .connectWith span {
   background: #fff;
@@ -64,9 +64,10 @@ export default {
   padding: 0 10px;
 }
 
-.image-auth {
+.image-auth{
   width: 35px;
   height: 35px;
+  margin: 12px 0 16px;
 }
 </style>
 

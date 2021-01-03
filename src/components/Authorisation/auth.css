@@ -57,12 +57,16 @@ input:focus {
   background-color: #69b9ff;
   width: 100px;
   transition: 0.3s linear;
+  margin-top: 2%;
+  margin-bottom: 5%;
 }
 
 .login_btn:hover {
   color: white;
   background-color: #4a95ff;
   transition: 0.3s linear;
+  margin-top: 2%;
+  margin-bottom: 5%;
 }
 
 .input-login,
