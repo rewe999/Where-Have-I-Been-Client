@@ -11,7 +11,7 @@
           aria-controls="collapseOne"
           @click="accordionActive = !accordionActive"
         >
-          Do you want add {{ searchValue.text }} to Trip ?
+          <!-- Do you want add {{ searchValue.text }} to Trip ? -->
         </button>
       </h2>
       <div
@@ -42,7 +42,7 @@ export default {
       accordionActive: false,
     };
   },
-  props: { searchValue: Object },
+  // props: { searchValue: Object },
   methods: {
     nullArray() {
       this.accordionActive = null;

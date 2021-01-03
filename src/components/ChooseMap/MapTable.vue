@@ -11,7 +11,7 @@
             <p>{{ data.place_name }}</p>
           </li>
         </ul>
-        <div v-if="searchValue">
+        <div v-if="geoData != null">
           <map-toast></map-toast>
         </div>
       </div>
@@ -25,7 +25,7 @@ import MapToast from "./MapToast.vue";
 export default {
   name: "MapTable",
   components: { MapToast },
-  props: { items: Array },
+  props: { items: Array, geoData: Object },
   methods: {
     showPlace(data) {
       this.$emit("single-place", data);

@@ -13,7 +13,10 @@ export default {
       map: null,
     };
   },
-  props: { items: Array },
+  props: {
+    items: Array,
+    clickedPlace: Number,
+  },
   methods: {
     createMap() {
       this.map = mapboxgl.accessToken =
@@ -34,11 +37,11 @@ export default {
       this.map.addControl(geocoder);
 
       // tu start
-      this.map.on("load", function () {
+      this.map.on("load", () => {
         // Add an image to use as a custom marker
         this.map.loadImage(
           "https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png",
-          function (error, image) {
+          (error, image) => {
             if (error) throw error;
             this.map.addImage("custom-marker", image);
             // Add a GeoJSON source with 3 points.
@@ -61,7 +64,7 @@ export default {
         );
 
         // Center the map on the coordinates of any clicked symbol from the 'symbols' layer.
-        this.map.on("click", "symbols", function (e) {
+        this.map.on("click", "symbols", (e) => {
           let desc =
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu";
 
@@ -87,13 +90,38 @@ export default {
         });
 
         // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
-        this.map.on("mouseenter", "symbols", function () {
+        this.map.on("mouseenter", "symbols", () => {
           this.map.getCanvas().style.cursor = "pointer";
         });
 
         // Change it back to a pointer when it leaves.
-        this.map.on("mouseleave", "symbols", function () {
+        this.map.on("mouseleave", "symbols", () => {
           this.map.getCanvas().style.cursor = "";
+        });
+      });
+      // single point
+      this.map.on("load", () => {
+        this.map.addSource("single-point", {
+          type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: [],
+          },
+        });
+
+        this.map.addLayer({
+          id: "point",
+          source: "single-point",
+          type: "circle",
+          paint: {
+            "circle-radius": 10,
+            "circle-color": "#448ee4",
+          },
+        });
+
+        geocoder.on("result", (ev) => {
+          this.map.getSource("single-point").setData(ev.result.geometry);
+          this.$emit('geo-object',ev.result);
         });
       });
       // tu end
@@ -101,6 +129,11 @@ export default {
   },
   mounted() {
     this.createMap();
+  },
+  updated() {
+    this.map.flyTo({
+      center: this.items[this.clickedPlace].center,
+    });
   },
 };
 </script>
