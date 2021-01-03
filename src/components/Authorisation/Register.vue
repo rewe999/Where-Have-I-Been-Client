@@ -51,7 +51,7 @@
       />
       <img
         src="../../assets/google-brands.svg"
-        alt="facebook"
+        alt="google"
         class="image-auth"
       />
     </div>
@@ -79,10 +79,10 @@ h2 span {
   font-size: 1rem;
   padding: 0 10px;
 }
-
-.image-auth {
+.image-auth{
   width: 35px;
   height: 35px;
+  margin: 18px 0 16px;
 }
 </style>
 
