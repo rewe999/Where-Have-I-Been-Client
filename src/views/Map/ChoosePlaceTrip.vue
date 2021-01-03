@@ -1,8 +1,16 @@
 <template>
   <div class="ListMap">
-    <map-table :items="mapItems" @single-place="ShowPlace"></map-table>
+    <map-table
+      :items="mapItems"
+      @single-place="ShowPlace"
+      :geoData="geoSearchData"
+    ></map-table>
   </div>
-  <base-map :items="mapItems"></base-map>
+  <base-map
+    :items="mapItems"
+    :clickedPlace="clickedPlace"
+    @geo-object="SearchObjGeo"
+  ></base-map>
 </template>
 
 <script>
@@ -15,6 +23,8 @@ export default {
   data() {
     return {
       mapItems: null,
+      clickedPlace: null,
+      geoSearchData: null,
     };
   },
   components: { MapTable, BaseMap },
@@ -28,9 +38,12 @@ export default {
           this.mapItems = res.data.features;
         });
     },
-    ShowPlace(data){
-      console.log(data);
-    }
+    ShowPlace(data) {
+      this.clickedPlace = data;
+    },
+    SearchObjGeo(data) {
+      this.geoSearchData = data;
+    },
   },
   mounted() {
     this.getGeoJson();
