@@ -1,6 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <div class="container-fluid">
+      <a class="navbar-brand" href="#">WHIB</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -21,7 +22,10 @@
       id="navbarNavDropdown"
       v-bind:class="{ show: toggleCollapse }"
       >
+        <ul class="navbar-nav text-rigth">
+
         <ul class="nav navbar-nav navbar-right text-rigth">
+
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
@@ -33,6 +37,7 @@
               @click="ToogleMenu()"
             >
               <i class="fas fa-envelope navbar-brand"><span class="badge badge-primary notifColor">12</span></i>
+
               <img src="../assets/avatar2.jpg" class="rounded-circle navAvatar" alt="" />
               Janek Kowalski
             </a>
@@ -47,8 +52,9 @@
             </ul>
           </li>
         </ul>
+      </ul>
       </div>
-    </div>
+     </div>
   </nav>
 </template>
 
@@ -80,5 +86,8 @@ export default {
 
 .notifColor {
   color:red;
+}
+.navbar-brand{
+  padding-left: 1rem;
 }
 </style>

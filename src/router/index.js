@@ -7,6 +7,31 @@ const routes = [
     component: () => import( "../views/Home.vue")
   },
   {
+    path: "/userProfile",
+    name: "userProfile",
+    component: () => import( "../views/ProfileSettingsView/UserProfile.vue")
+  },
+  {
+    path: "/userProfile/changePassword",
+    name: "changePassword",
+    component: () => import( "../views/ProfileSettingsView/changePassword.vue")
+  },
+  {
+    path: "/userProfile/email",
+    name: "changeEmail",
+    component: () => import( "../views/ProfileSettingsView/ProfileEmail.vue")
+  },
+  {
+    path: "/userProfile/profileDescription",
+    name: "profilDescription",
+    component: () => import( "../views/ProfileSettingsView/profilDescription.vue")
+  },
+  {
+    path: "/userProfile/profileDeleteAccount",
+    name: "profileDeleteAccount",
+    component: () => import( "../views/ProfileSettingsView/ProfileDeleteAccount.vue")
+  },
+  {
     path: "/login",
     name: "Login",
     component: () => import( "../views/Login.vue")
