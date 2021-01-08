@@ -4,16 +4,16 @@ html,
 body {
   background-image: url("http://getwallpapers.com/wallpaper/full/a/5/d/544750.jpg");
   background-size: cover;
-  background-repeat: no-repeat;
-  height: 100%;
+  background-repeat: repeat;
+  min-height: 110vh;
   font-family: "Numans", sans-serif;
 }
 
 .container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+margin-top: 4rem;
+margin-right: auto;
+margin-left: auto;
+
 }
 
 .card {
@@ -109,4 +109,8 @@ input:focus {
   padding-top: 0;
   font-weight: bold;
   font-size: 16px;
+}
+
+.regComponent {
+  margin: 5vh auto;
 }
