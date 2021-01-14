@@ -4,16 +4,25 @@
       <div class="container">
         <div class="row">
           <img
+            :src="image"
+            alt="img"
+            class="ProfileImgAvatar rounded-circle"
+            v-if="image"
+          />
+          <img
             src="../../assets/avatar2.jpg"
             alt="img"
             class="ProfileImgAvatar rounded-circle"
+            v-else
           />
           <div class="col-sm">
-            <strong>Janek Kowalski</strong>
-            <p>
-              Poland
+            <strong v-if="id"> {{ publicProfile.name }} z id {{ id }}</strong>
+            <strong v-else-if="name"> {{ name }} </strong>
+            <strong v-else>Janek Kowalski</strong>
+            <p v-if="user">
+              {{ user.nationality.code }}
               <img
-                src="https://upload.wikimedia.org/wikipedia/en/thumb/1/12/Flag_of_Poland.svg/1200px-Flag_of_Poland.svg.png"
+                :src="user.nationality.flag"
                 alt="flag"
                 class="ProfilFlagImg rounded-circle"
               />
@@ -23,12 +32,24 @@
             <button
               type="button"
               class="btn btn-info ml-3 float-end FollowButton"
+              v-if="id"
+              @click="handleAddFriend(id)"
             >
               Add Friend +
             </button>
             <button
               type="button"
+              class="btn btn-secondary float-end addFriendButton"
+              v-if="followed"
+              @click="handleUnfollowButton(id)"
+            >
+              Unfollow -
+            </button>
+            <button
+              type="button"
               class="btn btn-info float-end addFriendButton"
+              v-if="!followed && id"
+              @click="handleFollowButton(id)"
             >
               Follow +
             </button>
@@ -40,13 +61,83 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-    name: 'UserCardData',
+  name: "UserCardData",
+  data() {
+    return {
+      image: localStorage.getItem("photo"),
+      name: localStorage.getItem("name"),
+      id: this.$route.params.id,
+      followed: false,
+      publicProfile: {
+        name: "",
+        image: "",
+        country: "",
+        flag: "",
+        description: "",
+      },
+    };
+  },
+  methods: {
+    async checkIfFollowed() {
+      const fu = await axios.get(
+        "following/user/" + localStorage.getItem("userID"),
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      fu.data.data.forEach((el) => {
+        if (el.id == this.$route.params.id) {
+          this.followed = true;
+          console.log(el);
+          this.publicProfile.name = el.email;
+        }
+        // else this.followed = false;
+      });
+    },
+    async handleFollowButton(id) {
+      try {
+        const follow = await axios.post("follows/user/" + id, null, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(follow);
+        location.reload();
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    handleAddFriend(id) {
+      console.log(id);
+    },
+    async handleUnfollowButton(id) {
+      const unfollow = await axios.delete("follows/user/" + id, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+      this.sucess = unfollow.data.data;
+      location.reload();
+    },
+  },
+  props: { user: null },
+  mounted() {
+    // this.checkIfFollowed();
+  },
+  beforeMount(){
+    this.checkIfFollowed();
+  }
 };
 </script>
 
 <style>
-.ProfileImgAvatar{
+.ProfileImgAvatar {
   width: 140px;
   height: 100px;
   position: relative;

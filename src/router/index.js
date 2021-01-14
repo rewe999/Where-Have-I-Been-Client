@@ -3,8 +3,6 @@ import {
   createWebHistory
 } from "vue-router";
 
-import store from '../store/index';
-
 const routes = [{
     path: "/",
     name: "Home",
@@ -27,6 +25,14 @@ const routes = [{
     path: "/userProfile/changePassword",
     name: "changePassword",
     component: () => import("../views/ProfileSettingsView/changePassword.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/userProfile/resetPassword",
+    name: "Reset Password",
+    component: () => import("../views/ProfileSettingsView/resetPassword.vue"),
     meta: {
       requiresAuth: true,
     },
@@ -117,7 +123,6 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (localStorage.getItem("token")) {
-      console.log(store.getters);
       return next();
     } else {
       next("/login");

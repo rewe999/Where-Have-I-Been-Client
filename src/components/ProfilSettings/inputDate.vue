@@ -3,16 +3,31 @@
     <input
       class="form-control"
       type="date"
-      value="1998-16-12"
-      id="example-date-input"
+      id="DateID"
+      v-model="date"
+      @change="emitDate(date)"
     />
-    <label for="floatingInput">{{ name }}</label>
+    <label for="DateID" v-if="date">Date od birth: {{ date }}</label>
+    <label for="DateID" v-else>{{ name }}</label>
   </div>
 </template>
 
 <script>
 export default {
-  props: { name: String },
+  data() {
+    return {
+      date: null,
+    };
+  },
+  props: { name: String, user: null },
+  methods: {
+    emitDate(data) {
+      this.$emit("date", data);
+    },
+    setDate() {
+      this.date = this.user.birth_date;
+    },
+  },
 };
 </script>
 

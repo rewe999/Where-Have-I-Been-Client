@@ -1,18 +1,30 @@
 <template>
   <div class="form-floating mt-3">
     <input
-      type="email"
+      type="text"
       class="form-control"
       id="floatingInput"
-      placeholder="name@example.com"
+      v-model="Username"
+      @change="emitUserName(Username)"
     />
-    <label for="floatingInput">{{name}}</label>
+    <label for="floatingInput">{{ name }}</label>
   </div>
 </template>
 
 <script>
 export default {
-    props: {name: String}
+  name: "UserName input",
+  data() {
+    return {
+      Username: "",
+    };
+  },
+  props: { name: String, user: null },
+  methods: {
+    emitUserName(data) {
+      this.$emit("username", data);
+    },
+  },
 };
 </script>
 

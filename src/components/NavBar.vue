@@ -34,13 +34,20 @@
                 <i class="fas fa-envelope navbar-brand"
                   ><span class="badge badge-primary notifColor">12</span></i
                 >
-
+                <img
+                  v-if="photo"
+                  :src="photo"
+                  class="rounded-circle navAvatar"
+                  alt="avatar"
+                />
                 <img
                   src="../assets/avatar2.jpg"
                   class="rounded-circle navAvatar"
-                  alt=""
+                  alt="avatar"
+                  v-else
                 />
-                Janek Kowalski
+                <span v-if="user">{{ user.name }}</span>
+                <span v-else>Profil</span>
               </a>
               <!-- show na dole -->
               <ul
@@ -48,7 +55,7 @@
                 aria-labelledby="navbarDropdownMenuLink"
                 v-bind:class="{ show: toggleMenu }"
               >
-                <router-link to="/profile" class="dropdown-item"
+                <router-link to="/profil" class="dropdown-item"
                   >Profile</router-link
                 >
                 <router-link to="/" class="dropdown-item" @click="handleLogout"
@@ -64,7 +71,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import axios from "axios";
 
 export default {
   name: "NavBar",
@@ -72,6 +79,9 @@ export default {
     return {
       toggleCollapse: false,
       toggleMenu: false,
+      user: null,
+      name: localStorage.getItem("name"),
+      photo: null,
     };
   },
   methods: {
@@ -81,14 +91,29 @@ export default {
     ToggleCollapse() {
       this.toggleCollapse = !this.toggleCollapse;
     },
-    handleLogout(){
+    handleLogout() {
       localStorage.removeItem("token");
       this.$router.push("/");
-    }
+    },
+    async getUser() {
+      const response = await axios.get(
+        "profiles/" +
+          localStorage.getItem("profilID") +
+          "?representation=private",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (response.data.data.photo != null)
+        this.photo = response.data.data.photo.url;
+      this.user = response.data.data;
+    },
   },
-  computed: {
-    ...mapGetters(["user"]),
-  },
+  mounted(){
+    this.getUser();
+  }
 };
 </script>
 
