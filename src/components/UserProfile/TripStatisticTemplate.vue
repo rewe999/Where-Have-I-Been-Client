@@ -6,8 +6,7 @@
 
         <div class="tripScroll">
           <!-- Wycieczka -->
-          <trip-template></trip-template>
-          <trip-template></trip-template>
+          <trip-template :Trips="Trips"></trip-template>
           <!-- Koniec wycieczki -->
         </div>
       </div>
@@ -26,10 +25,35 @@
 <script>
 import TripTemplate from "./TripsTemplate.vue";
 import StatisticsTemplate from "./StatisticsTemplate.vue";
-
+import axios from "axios";
 export default {
   name: "TripStatisticTemplate",
   components: { TripTemplate, StatisticsTemplate },
+  data(){
+    return {
+      Trips: null,
+      id: this.$route.params.id,
+    }
+  },
+  methods: {
+    async getUserTrips() {
+      let trip = "";
+      if (this.id == undefined)
+        trip = "trips/user/" + localStorage.getItem("userID");
+      else trip = "trips/user/" + this.id;
+      if (this.id == undefined) {
+        const user = await axios.get(trip, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        this.Trips = user.data.data[0];
+      }
+    },
+  },
+  mounted(){
+    this.getUserTrips();
+  }
 };
 </script>
 
@@ -39,11 +63,14 @@ body {
 }
 
 .tripScroll {
-  height: 280px;
+  height: 80%;
   overflow-y: scroll;
 }
 
 .card3-2 {
+  width: 40vw;
+}
+.card3-1 {
   width: 40vw;
 }
 

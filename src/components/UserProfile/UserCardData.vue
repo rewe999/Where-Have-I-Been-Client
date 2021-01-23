@@ -4,10 +4,16 @@
       <div class="container">
         <div class="row">
           <img
-            :src="image"
+            v-if="publicProfile.image && id"
             alt="img"
             class="ProfileImgAvatar rounded-circle"
-            v-if="image"
+            :src="publicProfile.image"
+          />
+          <img
+            v-else-if="user && id == undefined"
+            alt="img"
+            class="ProfileImgAvatar rounded-circle"
+            :src="user.photo.url"
           />
           <img
             src="../../assets/avatar2.jpg"
@@ -16,10 +22,21 @@
             v-else
           />
           <div class="col-sm">
-            <strong v-if="id"> {{ publicProfile.name }} z id {{ id }}</strong>
-            <strong v-else-if="name"> {{ name }} </strong>
-            <strong v-else>Janek Kowalski</strong>
-            <p v-if="user">
+            <strong v-if="publicProfile.name"> {{ publicProfile.name }}</strong>
+            <strong v-else-if="id && publicProfile.name == null"
+              >New User</strong
+            >
+            <strong v-else-if="user && id == undefined"> {{ user.name }} </strong>
+            <strong v-else>New User</strong>
+            <p v-if="publicProfile.code">
+              {{ publicProfile.code }}
+              <img
+                :src="publicProfile.flag"
+                alt="flag"
+                class="ProfilFlagImg rounded-circle"
+              />
+            </p>
+            <p v-else-if="user && id == undefined">
               {{ user.nationality.code }}
               <img
                 :src="user.nationality.flag"
@@ -29,14 +46,6 @@
             </p>
           </div>
           <div class="col-md">
-            <button
-              type="button"
-              class="btn btn-info ml-3 float-end FollowButton"
-              v-if="id"
-              @click="handleAddFriend(id)"
-            >
-              Add Friend +
-            </button>
             <button
               type="button"
               class="btn btn-secondary float-end addFriendButton"
@@ -67,14 +76,15 @@ export default {
   name: "UserCardData",
   data() {
     return {
-      image: localStorage.getItem("photo"),
-      name: localStorage.getItem("name"),
+      image: null,
+      name: null,
+      nationality: null,
       id: this.$route.params.id,
       followed: false,
       publicProfile: {
         name: "",
         image: "",
-        country: "",
+        code: "",
         flag: "",
         description: "",
       },
@@ -95,9 +105,7 @@ export default {
         if (el.id == this.$route.params.id) {
           this.followed = true;
           console.log(el);
-          this.publicProfile.name = el.email;
         }
-        // else this.followed = false;
       });
     },
     async handleFollowButton(id) {
@@ -113,9 +121,6 @@ export default {
         console.log(e);
       }
     },
-    handleAddFriend(id) {
-      console.log(id);
-    },
     async handleUnfollowButton(id) {
       const unfollow = await axios.delete("follows/user/" + id, {
         headers: {
@@ -125,14 +130,37 @@ export default {
       this.sucess = unfollow.data.data;
       location.reload();
     },
+    async getPublicUser() {
+      if (this.id) {
+        try {
+          const pu = await axios.get("profiles/" + this.id, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (this.id === localStorage.getItem("userID"))
+            this.$router.push("/profil");
+
+          this.publicProfile.name = pu.data.data.name;
+          this.publicProfile.description = pu.data.data.description;
+          if (pu.data.data.photo)
+            this.publicProfile.image = pu.data.data.photo.url;
+          if (pu.data.data.nationality) {
+            this.publicProfile.flag = pu.data.data.nationality.flag;
+            this.publicProfile.code = pu.data.data.nationality.code;
+          }
+        } catch (err) {
+          if (err.response.status) this.$router.push("/profil");
+        }
+      }
+    },
   },
   props: { user: null },
-  mounted() {
-    // this.checkIfFollowed();
-  },
-  beforeMount(){
+  beforeMount() {
     this.checkIfFollowed();
-  }
+    this.getPublicUser();
+  },
 };
 </script>
 
