@@ -10,7 +10,7 @@ const routes = [{
   },
   {
     path: "/profil",
-    name: "profil",
+    name: "Profil",
     component: () => import( "../views/Profil.vue")
   },
   {
@@ -20,7 +20,7 @@ const routes = [{
   },
   {
     path: "/userProfile",
-    name: "userProfile",
+    name: "User Profile",
     component: () => import("../views/ProfileSettingsView/UserProfile.vue"),
     meta: {
       requiresAuth: true,
@@ -28,7 +28,7 @@ const routes = [{
   },
   {
     path: "/userProfile/changePassword",
-    name: "changePassword",
+    name: "Change Password",
     component: () => import("../views/ProfileSettingsView/changePassword.vue"),
     meta: {
       requiresAuth: true,
@@ -44,7 +44,7 @@ const routes = [{
   },
   {
     path: "/userProfile/email",
-    name: "changeEmail",
+    name: "Change Email",
     component: () => import("../views/ProfileSettingsView/ProfileEmail.vue"),
     meta: {
       requiresAuth: true,
@@ -52,7 +52,7 @@ const routes = [{
   },
   {
     path: "/userProfile/profileDescription",
-    name: "profilDescription",
+    name: "Profil Description",
     component: () => import("../views/ProfileSettingsView/profilDescription.vue"),
     meta: {
       requiresAuth: true,
@@ -112,7 +112,7 @@ const routes = [{
   },
   {
     path: "/community/users",
-    name: "CommunityUsers",
+    name: "Community Users",
     component: () => import("../views/CommunityuUser.vue"),
     meta: {
       requiresAuth: true,
@@ -124,6 +124,11 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 });
+
+router.beforeEach((to, from, next) => {
+  document.title = to.name;
+  next();
+})
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
