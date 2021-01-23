@@ -18,47 +18,62 @@
       </ul>
     </div>
     <div class="card-body">
-      <div class="input-group w-75 mx-auto">
-        <span class="input-group-text">Search User</span>
-        <input
-          type="text"
-          aria-label="First name"
-          class="form-control"
-          v-model="search"
-        />
+      <div class="input-group">
+        <div class="row w-100">
+          <div class="col">
+            <form class="form-floating" @submit.prevent="">
+              <input
+                type="text"
+                class="form-control"
+                id="floatingInputValue"
+                v-model="searchUserInput"
+                @keyup.enter="searchUser($event.target.value)"
+              />
+              <label for="floatingInputValue">Search User</label>
+            </form>
+          </div>
+          <div class="col">
+            <div class="form-floating">
+              <select
+                class="form-select"
+                id="floatingSelect"
+                aria-label="Floating label select example"
+                v-model="filterSelected"
+                @change="handleselectChange"
+              >
+                <option value="All">All Users</option>
+                <option value="Followed">Users by Followers</option>
+                <option value="Following">Users by Following</option>
+              </select>
+              <label for="floatingSelect">Filter By</label>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="d-flex justify-content-evenly flex-wrap mt-4">
-        <user-card
-          :items="itemsPagination"
-          :page="page"
-          :search="search"
-          :filterJson="filterJson"
-        ></user-card>
+        <user-card :FollowedUsers="FollowedUsers" :show="unfollow"></user-card>
       </div>
     </div>
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
-        <li class="page-item" :class="{ disabled: page == 0 }">
+        <li class="page-item" :class="{ disabled: page == 1 }">
           <a
             class="page-link"
             href="#ad"
             tabindex="-1"
             aria-disabled="true"
-            @click="page -= 1"
+            @click="fetchApi(), (page -= 1)"
+            :class="{ disabled: page == 1 }"
             >Previous</a
           >
         </li>
-        <li class="page-item">
-          <a class="page-link" href="#ad" @click="page = 0">1</a>
+        <li class="page-item disabled">
+          <a class="page-link"> {{ page }}</a>
         </li>
-        <li class="page-item">
-          <a class="page-link" href="#ad" @click="page = 1">2</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#ad" @click="page = 2">3</a>
-        </li>
-        <li class="page-item" :class="{ disabled: page == 2 }">
-          <a class="page-link" href="#ad" @click="page += 1">Next</a>
+        <li class="page-item" :class="{ disabled: page == maxPage }">
+          <a class="page-link" href="#ad" @click="fetchApi(), (page += 1)"
+            >Next</a
+          >
         </li>
       </ul>
     </nav>
@@ -67,44 +82,78 @@
 
 <script>
 import UserCard from "./UserCard.vue";
+import axios from "axios";
 
 export default {
-  name: "Cmtp",
+  name: "Community User Template",
   data() {
     return {
-      items: [
-        [
-          { name: "Jan Nowak" },
-          { name: "Alexis Newton" },
-          { name: "Armani Benitez" },
-          { name: "Tabitha Trejo" },
-        ],
-        [
-          { name: "Cleo Greene" },
-          { name: "Kamal Holden" },
-          { name: "Steve Riggs" },
-          { name: "Acacia Garner" },
-        ],
-        [{ name: "Roshan Perry" }, { name: "Adam Kowalski" }],
-      ],
+      FollowedUsers: null,
+      unfollow: false,
+      searchUserInput: "",
+      filterSelected: "All",
       page: 1,
-      maxPage: 0,
-      search: "",
-      coutnEl: 0,
+      maxPage: 1,
     };
   },
-  components: { UserCard },
-  mounted() {
-    this.coutnEl = Math.floor(this.items.length / 4);
-    this.page = 0;
-  },
-  computed: {
-    filterJson() {
-      return this.items[this.page].filter((js) => {
-        return js.name.match(this.search);
+  methods: {
+    async fetchApi() {
+      let getUsers = "";
+      if (this.filterSelected === "Followed") {
+        getUsers = "users?by-followings=true&per-page=9&page=" + this.page;
+        this.unfollow = true;
+      } else if (this.filterSelected === "Following") {
+        getUsers = "users?by-followers=true&per-page=9&page=" + this.page;
+        this.unfollow = false;
+      } else if (this.filterSelected === "All") {
+        getUsers = "users?&per-page=9&page=" + this.page;
+        this.unfollow = false;
+      }
+
+      const fu = await axios.get(getUsers, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
+      this.FollowedUsers = fu.data.data;
+      this.maxPage = Math.ceil(
+        fu.data.pagination.total / fu.data.pagination.count
+      );
     },
+    async searchUser(data) {
+      let search = "users";
+      if (data == "") search = "users";
+      else if (this.filterSelected === "All")
+        search = "users?search-query=" + data;
+      else if (this.filterSelected === "Followed")
+        search =
+          "users?by-followings=true&search-query=" +
+          data +
+          "&per-page=9&page=" +
+          this.page;
+      else if (this.filterSelected === "Following")
+        search =
+          "users?by-followers=true&search-query=" +
+          data +
+          "&per-page=9&page=" +
+          this.page;
+      const fu = await axios.get(search, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(search);
+      this.FollowedUsers = fu.data.data;
+    },
+    handleselectChange(){
+      this.page = 1;
+      this.fetchApi();
+    }
   },
+  mounted() {
+    this.fetchApi();
+  },
+  components: { UserCard },
 };
 </script>
 
